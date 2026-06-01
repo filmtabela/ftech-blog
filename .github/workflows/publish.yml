@@ -1,0 +1,66 @@
+name: Daily Blog Publish
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install
+      - name: Generate article
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node publish.js
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+      - name: Deploy blog to Hostinger
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASS }}
+        run: |
+          sshpass -p "$SSH_PASS" ssh \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -p 65002 \
+            u114546712@145.79.209.26 \
+            "mkdir -p /home/u114546712/domains/ftech.co.in/public_html/blog"
+          if [ "$(ls -A blog 2>/dev/null)" ]; then
+            sshpass -p "$SSH_PASS" scp \
+              -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              -P 65002 \
+              blog/* \
+              u114546712@145.79.209.26:/home/u114546712/domains/ftech.co.in/public_html/blog/
+          fi
+          if [ -f blog.html ]; then
+            sshpass -p "$SSH_PASS" scp \
+              -o StrictHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              -P 65002 \
+              blog.html \
+              u114546712@145.79.209.26:/home/u114546712/domains/ftech.co.in/public_html/blog.html
+          fi
+          sshpass -p "$SSH_PASS" ssh \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -p 65002 \
+            u114546712@145.79.209.26 \
+            "cp ~/domains/ftech.co.in/public_html/blog.html ~/domains/ftech.co.in/public_html/blog/index.html"
+          echo "Deploy complete"
+      - name: Commit and push
+        run: |
+          git config user.email "filmtabela@gmail.com"
+          git config user.name "filmtabela"
+          mkdir -p blog
+          git add published.json blog.html blog/ || true
+          git diff --cached --quiet || git commit -m "Published: $(date '+%Y-%m-%d')"
+          git push
