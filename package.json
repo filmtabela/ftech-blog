@@ -1,0 +1,11 @@
+{
+  "name": "ftech-blog",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "publish": "node publish.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0"
+  }
+}
