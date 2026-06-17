@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "publish": "node publish.js"
+    "publish": "node publish.js",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.101.0"
   }
 }
