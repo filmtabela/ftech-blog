@@ -160,5 +160,14 @@
     "excerpt": "Small teams face a critical choice between Google Workspace and Microsoft 365, two dominant cloud productivity platforms. We break down the key differences, costs, and features to help you decide which solution best fits your team's unique needs.",
     "readTime": "5 min read",
     "date": "5 July 2026"
+  },
+  {
+    "topic": "How Amazon Web Services pricing works and when it makes sense for SMBs",
+    "slug": "aws-pricing-decoded-smart-cloud-strategy-for-growing-smbs",
+    "title": "AWS Pricing Decoded: Smart Cloud Strategy for Growing SMBs",
+    "category": "Cloud & Infrastructure",
+    "excerpt": "Amazon Web Services offers powerful cloud solutions, but understanding its pricing model is crucial for SMBs to avoid unexpected costs. Learn how to evaluate whether AWS makes financial sense for your business and implement cost optimization strategies.",
+    "readTime": "5 min read",
+    "date": "7 July 2026"
   }
 ]
