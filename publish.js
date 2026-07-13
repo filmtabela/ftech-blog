@@ -58,14 +58,27 @@ function slugify(text) {
     .substring(0, 80);
 }
 
+function stripCodeFences(text) {
+  return text
+    .trim()
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/```\s*$/, "")
+    .trim();
+}
+
 async function generateArticle(topic) {
-  const response = await client.messages.create({
-model: "claude-haiku-4-5-20251001",
-    max_tokens: 2000,
-    messages: [
-      {
-        role: "user",
-        content: `Write a detailed, engaging blog article for the Fortune Tech website (an IT services company based in Hyderabad, India that helps businesses upgrade their technology).
+  const MAX_ATTEMPTS = 2;
+  let lastText;
+  let lastError;
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const response = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 2000,
+      messages: [
+        {
+          role: "user",
+          content: `Write a detailed, engaging blog article for the Fortune Tech website (an IT services company based in Hyderabad, India that helps businesses upgrade their technology).
 
 Topic: "${topic}"
 
@@ -87,13 +100,23 @@ Return this exact JSON structure:
   "excerpt": "2 sentence summary",
   "content": "full HTML article content using <h2>, <p>, <ul>, <li>, <strong> tags only"
 }`,
-      },
-    ],
-  });
+        },
+      ],
+    });
 
-  const text = response.content[0].text;
-  const clean = text.replace(/```json|```/g, "").trim();
-  return JSON.parse(clean);
+    const text = response.content[0].text;
+    lastText = text;
+
+    try {
+      return JSON.parse(stripCodeFences(text));
+    } catch (err) {
+      lastError = err;
+      console.error(`JSON parse failed on attempt ${attempt}/${MAX_ATTEMPTS}: ${err.message}`);
+    }
+  }
+
+  console.error("Raw model response after final attempt:\n", lastText);
+  throw lastError;
 }
 
 function buildArticleHTML(article, slug, date) {
