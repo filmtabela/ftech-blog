@@ -28,4 +28,4 @@ jobs:
           git config user.email "filmtabela@gmail.com"
           git add .
           git diff --staged --quiet || git commit -m "Batch publish: $(date +'%Y-%m-%d %H:%M')"
-          git push
+          git push https://${{ github.token }}@github.com/filmtabela/ftech-blog.git
