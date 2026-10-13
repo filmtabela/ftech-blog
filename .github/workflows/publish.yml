@@ -1,34 +1,50 @@
-name: Batch Publish - ftech
+name: Daily Blog Publish - ftech
 on:
   schedule:
-    - cron: '30 2 * * *'   # 8:00 AM IST — queue batch
-    - cron: '30 14 * * *'  # 8:00 PM IST — retrieve & publish
+    - cron: '0 4 * * *'   # 9:30 AM IST, one article a day
+  push:
+    branches: [main]
+    paths: ['publish.js', '.github/workflows/publish.yml']
   workflow_dispatch:
-  
+
 permissions:
   contents: write
-  
+
+concurrency:
+  group: ftech-publish
+  cancel-in-progress: false
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - name: Install dependencies
         run: npm install
-      - name: Run publish script
+      - name: Generate article
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: node publish.js
       - name: Commit and push
         run: |
-          git config user.name "ftech Publisher Bot"
           git config user.email "filmtabela@gmail.com"
-          git add .
-          git diff --staged --quiet || git commit -m "Batch publish: $(date +'%Y-%m-%d %H:%M')"
-          git push https://${{ github.token }}@github.com/filmtabela/ftech-blog.git
+          git config user.name "ftech Publisher Bot"
+          git add published.json blog.html blog/
+          git diff --cached --quiet || git commit -m "Published: $(date '+%Y-%m-%d')"
+          git push origin HEAD:main
+      - name: Deploy blog to Hostinger
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASS }}
+        run: |
+          sudo apt-get install -y sshpass >/dev/null
+          OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          R=u114546712@145.79.209.26
+          ROOT=/home/u114546712/domains/ftech.co.in/public_html
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "mkdir -p $ROOT/blog"
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 blog/*.html $R:$ROOT/blog/
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 blog.html $R:$ROOT/blog.html
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "cp $ROOT/blog.html $ROOT/blog/index.html"
+          echo "Deploy complete"
