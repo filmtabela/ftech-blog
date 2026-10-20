@@ -1,0 +1,33 @@
+name: Site - pull live pages into repo
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download live root pages from Hostinger
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASS }}
+        run: |
+          sudo apt-get install -y sshpass >/dev/null
+          OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          R=u114546712@145.79.209.26
+          ROOT=/home/u114546712/domains/ftech.co.in/public_html
+          mkdir -p site/live
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "ls -la $ROOT" > site/live/_listing.txt
+          for f in $(sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "cd $ROOT && ls -p | grep -v / | grep -Ei '\.(html|css|js|txt|xml|png|svg|ico|webp|jpg)$'"); do
+            sshpass -p "$SSH_PASS" scp $OPTS -P 65002 "$R:$ROOT/$f" "site/live/$f"
+          done
+          ls -la site/live
+      - name: Commit
+        run: |
+          git config user.email "filmtabela@gmail.com"
+          git config user.name "ftech Site Bot"
+          git add site/live
+          git diff --cached --quiet || git commit -m "Snapshot of live ftech.co.in root pages [skip ci]"
+          git push origin HEAD:main
