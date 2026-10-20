@@ -1,0 +1,34 @@
+name: Site - deploy main pages
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'site/index.html'
+      - 'site/ai-visibility/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ftech-site-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload to Hostinger (old homepage backed up first)
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASS }}
+        run: |
+          sudo apt-get install -y sshpass >/dev/null
+          OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          R=u114546712@145.79.209.26
+          ROOT=/home/u114546712/domains/ftech.co.in/public_html
+          STAMP=$(date +%Y%m%d-%H%M%S)
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "mkdir -p /home/u114546712/backups/ftech && cp $ROOT/index.html /home/u114546712/backups/ftech/index-$STAMP.html && mkdir -p $ROOT/ai-visibility"
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/index.html $R:$ROOT/index.html
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/ai-visibility/index.html $R:$ROOT/ai-visibility/index.html
+          echo "Deployed. Backup: backups/ftech/index-$STAMP.html"
