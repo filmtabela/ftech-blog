@@ -118,6 +118,20 @@ footer a:hover{color:var(--ink);}
 .langsw strong{color:var(--teal);background:var(--teal-soft);}
 @media (max-width:520px){.nav-inner{gap:0.5rem;}.langsw{margin-left:0.3rem;}.langsw a,.langsw strong{padding:4px 5px;}.links .btn{margin-left:0;padding:8px 11px;font-size:0.82rem;}.nav-links .cta{margin-left:0;padding:8px 11px;font-size:0.82rem;}}
 @media (max-width:380px){.logo,.nav-logo{font-size:1.15rem;}.links .btn,.nav-links .cta{padding:7px 9px;font-size:0.78rem;}.langsw a,.langsw strong{padding:4px 4px;}}
+/* free AI visibility check button + full menu on small screens */
+.btn.check{background:var(--teal-soft);color:var(--teal-dark);border:1.5px solid var(--teal);}
+.btn.check:hover{background:#d3e9e3;}
+.links{display:flex;align-items:center;}
+.links a{margin-left:1.2rem;}
+.links .btn{margin-left:0.8rem;}
+.links a.btn.check{color:var(--teal-dark);}
+@media (max-width:900px){
+.nav-inner{flex-wrap:wrap;height:auto;padding-top:10px;padding-bottom:8px;row-gap:6px;}
+.langsw{margin-left:auto;}
+.links{order:3;flex-basis:100%;margin-left:0;flex-wrap:wrap;padding-bottom:4px;gap:0.35rem 0.25rem;}
+.links a:not(.btn){display:inline-block;margin-left:0;padding:6px 10px;}
+.links .btn{margin-left:0;flex:none;}
+}
 </style>
 </head>
 <body>
@@ -129,6 +143,7 @@ footer a:hover{color:var(--ink);}
     <a href="#services">Servicios</a>
     <a href="#how">Cómo funciona</a>
     <a href="/blog/">Blog</a>
+    <a class="btn check" href="https://check.ftech.co.in" title="Revisión gratuita de visibilidad en IA">Revisión gratuita de IA</a>
     <a class="btn primary" href="#contact">Contáctenos</a>
   </div>
   <div class="langsw" role="group" aria-label="Idioma"><a href="/" hreflang="en" lang="en" title="English">EN</a><strong lang="es" aria-current="page" title="Español">ES</strong><a href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
@@ -140,6 +155,7 @@ footer a:hover{color:var(--ink);}
   <p>FTech ayuda a empresas y profesionales de todo el mundo a usar la IA de forma práctica: cómo se presenta en internet, cómo atiende a sus clientes y con qué rapidez salen sus contenidos y documentos. Sin tecnicismos, sin ataduras y con precios en dólares estadounidenses.</p>
   <div class="btns">
     <a class="btn primary" href="#contact">Reserve una consulta gratuita</a>
+    <a class="btn check" href="https://check.ftech.co.in">Revisión gratuita de visibilidad en IA</a>
     <a class="btn ghost" href="#services">Ver servicios</a>
   </div>
   <div class="regions"><b>Trabajamos a distancia con clientes en</b>
