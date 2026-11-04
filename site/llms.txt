@@ -1,0 +1,29 @@
+# FortuneTech
+
+> FortuneTech (ftech.co.in) sets up and runs practical AI services for businesses and professionals worldwide, from Hyderabad, India. Services are delivered remotely, priced in US dollars, and nothing is published or sent in a client's name without their approval.
+
+## Services
+
+- AI Visibility & Profile Management: monthly management of how you appear in search results, on LinkedIn and in AI assistants. From $350/month, with a free visibility audit.
+- AI Chatbot Setup: a website assistant trained on your own products and policies. $600 setup plus $150/month.
+- AI Content System: drafts social posts and articles in your brand voice; nothing posts until you approve it. $450 setup plus $250/month.
+- Business Documents on Demand: proposals, tenders, reports and presentations, up to 10 a month. $300/month.
+
+## Key pages
+
+- [Home](https://ftech.co.in/): services, how it works, FAQ and contact
+- [AI Visibility & Profile Management](https://ftech.co.in/ai-visibility/): plans, how it works and FAQ
+- [Free AI Visibility Check](https://check.ftech.co.in): free tool to check your AI visibility
+- [Insights blog](https://ftech.co.in/blog/): articles on how businesses use AI and technology
+- [Sitemap](https://ftech.co.in/sitemap.xml)
+
+## Other languages
+
+- [Español](https://ftech.co.in/es/)
+- [Português](https://ftech.co.in/pt/)
+
+## Contact
+
+- Email: hello@ftech.co.in
+- Phone (landline): +91 40 4585 5856
+- Office: East Marredpally, Secunderabad, Hyderabad, India
