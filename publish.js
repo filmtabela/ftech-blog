@@ -119,7 +119,7 @@ async function generateArticle(topic) {
       messages: [
         {
           role: "user",
-          content: `Write a detailed, engaging blog article for the Fortune Tech website (an IT services company based in Hyderabad, India that helps businesses upgrade their technology).
+          content: `Write a detailed, engaging blog article for the FortuneTech website (an IT services company based in Hyderabad, India that helps businesses upgrade their technology).
 
 Topic: "${topic}"
 
@@ -129,7 +129,7 @@ Requirements:
 - Tone: authoritative but accessible, global audience
 - Include real company examples where relevant
 - Include practical takeaways for business owners
-- End with a soft CTA mentioning Fortune Tech can help businesses with their digital transformation
+- End with a soft CTA mentioning FortuneTech can help businesses with their digital transformation
 - Format: return ONLY valid JSON, no markdown, no backticks
 
 Return this exact JSON structure:
@@ -189,8 +189,8 @@ ${NAV}
 ${article.content}
 <div class="cta-box">
 <h3>Ready to Transform Your Business with Technology?</h3>
-<p>Fortune Tech helps businesses across India and globally upgrade their digital infrastructure, build websites, and implement the right tech stack for growth.</p>
-<a href="/index.html#contact" class="cta-btn">Talk to Fortune Tech →</a>
+<p>FortuneTech helps businesses across India and globally upgrade their digital infrastructure, build websites, and implement the right tech stack for growth.</p>
+<a href="/index.html#contact" class="cta-btn">Talk to FortuneTech →</a>
 </div>
 </div>
 ${FOOTER}

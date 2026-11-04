@@ -1,0 +1,32 @@
+name: Blog - deploy only (no article generation)
+# Manual only. Uploads the blog pages already in the repo to Hostinger.
+# Does NOT run publish.js, does NOT call the Anthropic API, does NOT commit anything.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ftech-blog-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Back up the live blog, then upload
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASS }}
+        run: |
+          sudo apt-get install -y sshpass >/dev/null
+          OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          R=u114546712@145.79.209.26
+          ROOT=/home/u114546712/domains/ftech.co.in/public_html
+          STAMP=$(date +%Y%m%d-%H%M%S)
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "mkdir -p /home/u114546712/backups/ftech $ROOT/blog && cd $ROOT && tar czf /home/u114546712/backups/ftech/blog-$STAMP.tgz blog blog.html"
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 blog/*.html $R:$ROOT/blog/
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 blog.html $R:$ROOT/blog.html
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "cp $ROOT/blog.html $ROOT/blog/index.html"
+          echo "Blog deployed. Backup: backups/ftech/blog-$STAMP.tgz"
