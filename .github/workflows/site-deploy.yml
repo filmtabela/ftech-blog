@@ -6,6 +6,9 @@ on:
     paths:
       - 'site/index.html'
       - 'site/ai-visibility/**'
+      - 'site/es/**'
+      - 'site/pt/**'
+      - 'site/sitemap.xml'
 
 permissions:
   contents: read
@@ -28,7 +31,12 @@ jobs:
           R=u114546712@145.79.209.26
           ROOT=/home/u114546712/domains/ftech.co.in/public_html
           STAMP=$(date +%Y%m%d-%H%M%S)
-          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "mkdir -p /home/u114546712/backups/ftech && cp $ROOT/index.html /home/u114546712/backups/ftech/index-$STAMP.html && mkdir -p $ROOT/ai-visibility"
+          sshpass -p "$SSH_PASS" ssh $OPTS -p 65002 $R "mkdir -p /home/u114546712/backups/ftech && cp $ROOT/index.html /home/u114546712/backups/ftech/index-$STAMP.html && mkdir -p $ROOT/ai-visibility $ROOT/es/ai-visibility $ROOT/pt/ai-visibility"
           sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/index.html $R:$ROOT/index.html
           sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/ai-visibility/index.html $R:$ROOT/ai-visibility/index.html
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/es/index.html $R:$ROOT/es/index.html
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/es/ai-visibility/index.html $R:$ROOT/es/ai-visibility/index.html
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/pt/index.html $R:$ROOT/pt/index.html
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/pt/ai-visibility/index.html $R:$ROOT/pt/ai-visibility/index.html
+          sshpass -p "$SSH_PASS" scp $OPTS -P 65002 site/sitemap.xml $R:$ROOT/sitemap.xml
           echo "Deployed. Backup: backups/ftech/index-$STAMP.html"
